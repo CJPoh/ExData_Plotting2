@@ -27,3 +27,32 @@ file.remove( source.files )
 rm(source.files)
 # save to RData file
 save.image( 'NEI.RData' )
+
+
+# 3. inspect data and recode
+str(SCC)
+head(SCC)
+str(NEI)
+head(NEI)
+names(SCC)
+names(NEI)
+new.names <- gsub( '_', '.', names(SCC)  )
+new.names <- tolower( new.names )
+names( SCC ) <- new.names
+new.names <- gsub( '_', '.', names(NEI)  )
+new.names <- tolower( new.names )
+names( NEI ) <- new.names
+names(SCC)
+names(NEI)
+rm(new.names)
+save.image( 'NEI.RData' )
+
+
+# 4. plot the data
+# summarize the data
+library(plyr)
+emissions <- ddply(NEI, .(year), summarize, total.emissions = sum(emissions) )
+# plot the data
+png('plot1.png')
+plot(emissions, type='l')
+dev.off()
